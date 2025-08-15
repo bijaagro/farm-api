@@ -139,7 +139,7 @@ function createServer() {
   registerRoute("post", "/vaccination-records", addVaccinationRecord);
   registerRoute("get", "/health-records", getHealthRecords);
   registerRoute("post", "/health-records", addHealthRecord);
-  registerRoute("put", "/health-records", updateHealthRecord);
+  registerRoute("put", "/health-records/:id", updateHealthRecord);
   return app;
 }
 

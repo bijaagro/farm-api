@@ -709,38 +709,34 @@ export const addHealthRecord: RequestHandler = async (req, res) => {
 };
 export const updateHealthRecord: RequestHandler = async (req, res) => {
   try {
-     const { id } = req.params;
+    const { id } = req.params;
     const newRecord: HealthRecord = req.body;
-
+console.log("Updating health record with ID:", id, "Data:", newRecord);
     const recordData = {
-      animalId: parseInt(newRecord.animalId),
       recordType: newRecord.recordType,
       date: newRecord.date,
       description: newRecord.description,
       veterinarianName: newRecord.veterinarianName,
-      diagnosis: newRecord.diagnosis,
-      treatment: newRecord.treatment,
-      medications: newRecord.medications,
-      cost: newRecord.cost,
-      nextCheckupDate: newRecord.nextCheckupDate,
+      cost: newRecord.cost,      
       notes: newRecord.notes
     };
 
     const { data, error } = await supabase
       .from('health_records')
-      .update(newRecord)
+      .update(recordData)
       .eq('id', parseInt(id))
       .select()
       .single();
 
     if (error) {
+      
       if (error.code === 'PGRST116') {
         return res.status(404).json({ error: "Record not found" });
       }
       console.error("Supabase update error:", error);
       throw error;
     }
-
+console.log("Updated health record:", data);
     const returnRecord = {
       id: data.id.toString(),
       animalId: data.animalId.toString(),
