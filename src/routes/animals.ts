@@ -707,7 +707,61 @@ export const addHealthRecord: RequestHandler = async (req, res) => {
     res.status(500).json({ error: "Failed to add health record" });
   }
 };
+export const updateHealthRecord: RequestHandler = async (req, res) => {
+  try {
+     const { id } = req.params;
+    const newRecord: HealthRecord = req.body;
 
+    const recordData = {
+      animalId: parseInt(newRecord.animalId),
+      recordType: newRecord.recordType,
+      date: newRecord.date,
+      description: newRecord.description,
+      veterinarianName: newRecord.veterinarianName,
+      diagnosis: newRecord.diagnosis,
+      treatment: newRecord.treatment,
+      medications: newRecord.medications,
+      cost: newRecord.cost,
+      nextCheckupDate: newRecord.nextCheckupDate,
+      notes: newRecord.notes
+    };
+
+    const { data, error } = await supabase
+      .from('health_records')
+      .update(newRecord)
+      .eq('id', parseInt(id))
+      .select()
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: "Record not found" });
+      }
+      console.error("Supabase update error:", error);
+      throw error;
+    }
+
+    const returnRecord = {
+      id: data.id.toString(),
+      animalId: data.animalId.toString(),
+      recordType: data.recordType,
+      date: data.date,
+      description: data.description,
+      veterinarianName: data.veterinarianName,
+      diagnosis: data.diagnosis,
+      treatment: data.treatment,
+      medications: data.medications,
+      cost: data.cost,
+      nextCheckupDate: data.nextCheckupDate,
+      notes: data.notes,
+      createdAt: data.createdAt
+    };
+    res.json(returnRecord);
+  } catch (error) {
+    console.error("Error Updating health record:", error);
+    res.status(500).json({ error: "Failed to update health record" });
+  }
+};
 // Dashboard summary
 export const getAnimalSummary: RequestHandler = async (req, res) => {
   try {

@@ -44,6 +44,7 @@ import {
   addVaccinationRecord,
   getHealthRecords,
   addHealthRecord,
+  updateHealthRecord,
   getAnimalSummary,
   backupAnimals,
 } from "./routes/animals";
@@ -138,7 +139,7 @@ function createServer() {
   registerRoute("post", "/vaccination-records", addVaccinationRecord);
   registerRoute("get", "/health-records", getHealthRecords);
   registerRoute("post", "/health-records", addHealthRecord);
-
+  registerRoute("put", "/health-records", updateHealthRecord);
   return app;
 }
 
