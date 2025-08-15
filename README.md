@@ -82,6 +82,7 @@ npm start
 - `POST /api/vaccination-records` - Create vaccination record
 - `GET /api/health-records` - Get health records
 - `POST /api/health-records` - Create health record
+- `PUT /api/health-records` - Update health record
 
 ## Data Storage
 
